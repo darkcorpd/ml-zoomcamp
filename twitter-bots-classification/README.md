@@ -4,35 +4,29 @@ for the [Machine Learning Zoomcamp](https://mlzoomcamp.com) by Alexey Grigorev.
 ## Problem description
 
 ### Twitter bot detection using supervised machine learning
-In the world of Internet and social media, there are about 3.8 billion active social media users and 4.5 billion people accessing the internet daily. Every year there is a 9% growth in the number of users and half of the internet traffic consists of mostly bots.
+In the world of Internet and social media, there are about 3.8 billion active social media users and half of the internet traffic consists of mostly bots.
 
 Malicious bots make up 20% of the traffic, they are used for nefarious purposes, they can mimic human behavior, they can impersonate legal traffic, attack IoT devices and exploit their performance. 
 Among all these concerns, the primary concern is for social media users as they represent a large group of active users on the internet, they are more vulnerable to breach of data, change in opinion based on data. Detection of such bots is crucial to prevent further mishaps. 
 
-I use supervised Machine learning techniques in this project such as Logistic regression, Decision tree, Random Forest and XGBoost to calculate their accuracies and compare to detect Twitter bots from a given training data set. 
+I use supervised Machine learning techniques in this project such as Logistic regression, Decision tree, Random Forest and XGBoost to calculate their accuracies and compare to detect Twitter bots from a collected training data set. 
 
 ## Data collection
 
-I have found a [dataset](https://github.com/antibot4navalny/accounts_labelled/blob/main/labels.json) of accounts recognized as Twitter bots. The dataset is used in Chrome extention '[MetaBot for Twitter](https://github.com/antibot4navalny/metabot)' to highlight bots on Twitter.
+I use a [list](https://github.com/antibot4navalny/accounts_labelled/blob/main/labels.json) of accounts recognized as Twitter bots. This list is used in Chrome extention '[MetaBot for Twitter](https://github.com/antibot4navalny/metabot)' to highlight bots on Twitter.
 
-To get a list of account names from the JSON I simply subset even keys.
+I use a `twitter_scraper_selenium` library to get profile details.
 
-After that I used a `twitter_scraper_selenium` library to get profile details.
+The list comparation is used to update the collected dataset by the information for new names in the bot list (updatable list).
 
-As I have collected some data before I use list comparation to update information only for new names in bot list (updatable).
-
-My recent bots dataset contains 773 rows × 122 columns.
-
-The same way is used to collected data on real organic users provided by the same author `antibot4navalny`. Two datasets of bot and organic users' profiles are mixed to get a train set for a bot classification problem.
+The same way is used to collected data on real organic users provided by the same author `antibot4navalny`. Two datasets of bot and organic users' profiles are mixed to get a train set for a bot classification problem. The cleaned of duplicates dataset contains 1220 rows × 157 columns.
 
 ## Exploratory data analysis (EDA) 
 is an especially important activity in the routine of a data analyst or scientist. It enables an in depth understanding of the dataset, define or discard hypotheses and create predictive models on a solid basis.
 
-First of all I remove duplicates.
-
-Then as some of the columns of dataframe are actually empty we can drop them too. To find a thereshold by which I will drop the columns I've plotted a distribution chart for NaN values. All the columns that have more than 2 NaN values can be removed.
-
-After that I have explored the data by the common approach:
+1. Remove duplicates.
+2. Drop actually empty columns by the thereshold. To find a thereshold by which I will drop the columns I've plotted a distribution chart for NaN values. All the columns that have more than 2 NaN values can be removed.
+3. Explore the data by the common approach:
 *	**Variable:** name of the variable.
 *	**Type:** the type or format of the variable. This can be categorical, numeric, Boolean, and so on.
 *	**Context:** useful information to understand the semantic space of the variable. In the case of our dataset, the context is the social one.
@@ -149,8 +143,10 @@ RandomForestClassifier(max_depth=10, n_estimators=200, random_state=1) with roc_
     'min_child_weight': 1 
      with roc_auc_score = 98.74%
 
-5.- The models were compared, where XGboost was the one with the best roc_auc_score
+The models were compared, where RandomForest was the one with the best roc_auc_score
 
-6.- The final model was trained with the full data train and compared with the test data, the roc_auc_score was better with a 98.24% of roc_auc_score.
+The final model was trained with the full data train and compared with the test data, the roc_auc_score was better with a 98.24% of roc_auc_score.
 
 ## Deployment locally
+
+
