@@ -24,7 +24,9 @@ I have used a `twitter_scraper_selenium` library to get profile details.
 
 The list comparation is used to update the collected dataset by the information for new names in the bot list (updatable list).
 
-The same way is used to collected data on real organic users provided by the same author `antibot4navalny`. Two datasets of bot and organic users' profiles are mixed to get a train set for a bot classification problem. The cleaned of duplicates dataset contains 1220 rows × 157 columns.
+The same way is used to collected data on real organic users provided by the same author [antibot4navalny](https://github.com/antibot4navalny). Two datasets of bot and organic users' profiles are mixed to get a train set for a bot classification problem. The cleaned of duplicates dataset contains 1220 rows × 157 columns.
+
+The data collection proccess is described in [twitter_data_collect.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/twitter_data_collect.ipynb).
 
 ## Exploratory data analysis (EDA) 
 is an especially important activity in the routine of a data analyst or scientist. It enables an in depth understanding of the dataset, define or discard hypotheses and create predictive models on a solid basis.
@@ -38,9 +40,9 @@ is an especially important activity in the routine of a data analyst or scientis
 *	**Expectation:** how relevant is this variable with respect to our task? We can use a scale “High, Medium, Low”.
 *	**Comments:** whether or not we have any comments to make on the variable.
 
-The discription of the variables can be found [here](https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/user)
+The description of the variables can be found on [developer.twitter.com](https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/user)
 
-After some research I decised to go with a list of 13 features:
+After some research I decided to go with a list of 13 features:
 ```
 numerical = ['statuses_count',
              'followers_count',
@@ -59,6 +61,7 @@ categorical = ['default_profile_image',
 ```
 
 ## Model selection and parameter tuning 
+
 I have trained 4 models: LogisticRegression, DecisionTree, RandomForest and XGBoost.
 
 The validation framework was created by the splitting dataset into train, validation and test sets. The target variable was removed from the original dataset.
@@ -68,61 +71,88 @@ The four models were trained and tuned on the following parameters:
 
 **LogisticRegression**:
 * C parameter of regularization
-LogisticRegression(C=0.01, max_iter=1000, random_state=1)
+
+*LogisticRegression(C=0.1, max_iter=1000, random_state=1)*
 
 **DecisionTree**:
 * max_depth
 * min_sample_leaf
-DecisionTreeClassifier(max_depth=4, min_samples_leaf=5)
+
+*DecisionTreeClassifier(max_depth=4, min_samples_leaf=15)*
 
 **RandomForest**:
 * n_estimators 
 * max_depth 
 * min_samples_leaf
-RandomForestClassifier(max_depth=10, n_estimators=200, random_state=1)
+
+*RandomForestClassifier(max_depth=10, n_estimators=90, random_state=1, min_samples_leaf = 1)*
 
 **XGBoost**:
 * eta
 * max_depth
 * min_child_weight
-XGBClassifier(eta=0.1, max_depth=5, min_child_weight=1)
+
+*XGBClassifier(eta=0.1, max_depth=3, min_child_weight=1)*
 
 The models were compared, where RandomForest was the one with the best roc_auc_score:
 
 |Model|roc_auc_score|
 |-----|--|
-|LogisticRegression|96.43%|
-|DecisionTree|97.24%|
-|**RandomForest**|**98.90%**|
-|XGBoost|98.74%|
+|LogisticRegression|98.43%|
+|DecisionTree|97.91%|
+|**RandomForest**|**98.83%**|
+|XGBoost|98.56%|
 
-The final model was trained with the full data train and compared with the test data, the roc_auc_score was 98.24%.
+The final models were trained with the full data train and compared with the test data. 
+|Model|roc_auc_score|
+|-----|--|
+|LogisticRegression|98.26%|
+|DecisionTree|97.22%|
+|**RandomForest**|**98.97%**|
+|XGBoost|98.55%|
+
 
 ## Deployment locally using [BentoML](https://docs.bentoml.org/en/latest/tutorial.html)
 
-The file [build_bento_model_twitter_bots.ipynb](https://github.com/FranciscoOrtizTena/ML_Zoomcamp/blob/main/8_week/build_bento_model_maintenance.ipynb) can be used to train the best model and save into a BentoML model for deployment.
+The file [build_bento_model_twitter_bots.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/build_bento_model_twitter_bots.ipynb) can be used to train the best model and save into a BentoML model for deployment.
 
 The following command is used to import the BentoML model:
 
 ```bash
-bentoml models import twitter_bots_predict_model:asw4gns4q2vxgjv5.bentomodel
+bentoml models import twitter_bot_classify_model:xng2m3daog2ndodq.bentomodel
 ```
 
-The file [service.py](https://github.com/FranciscoOrtizTena/ML_Zoomcamp/blob/main/8_week/train.py) is elaborated with the script to deploy it locally using the BentoML interface. 
+The file [train.py](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/train.py) is elaborated with the script to deploy it locally using the BentoML interface. 
 
 Local deployment can be run using the following command in the terminal:
 
 ```
-bentoml serve service.py:svc --production
+bentoml serve train.py:svc --production
 ```
 
 The Swagger interfase can be found by the address of [local host](http://localhost:3000)
 
 ## Deployment locally using Jupyter Notebook 
 
-The file [predict.ipynb](https://github.com/FranciscoOrtizTena/ML_Zoomcamp/blob/main/8_week/predict.ipynb) can be used to load the BentoML model and predict if a Twitter user is bot or not. 
+The file [predict.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/predict.ipynb) can be used to load the BentoML model and predict if a Twitter user is bot or not. 
 
 A dictionary scheme must be used:
+
+```
+statuses_count: float
+followers_count: float
+friends_count: float
+favourites_count: float
+listed_count: float
+media_count: float
+life_span: int
+default_profile_image: bool
+geo_enabled: bool
+protected: bool
+verified: bool
+has_custom_timelines: bool
+advertiser_account_type: object
+```
 
 ```python
 {"type": str,
@@ -136,6 +166,36 @@ A dictionary scheme must be used:
  Here is an example
  
  ```python
+ # This user is actually a bot
+test1 = {"statuses_count": 417.0,
+         "followers_count": 0.0,
+         "friends_count": 1.0,
+         "favourites_count": 5.0,
+         "listed_count": 0.0,
+         "media_count": 0.0,
+         "life_span": 124,
+         "default_profile_image": True,
+         "geo_enabled": False,
+         "protected": False,
+         "verified": False,
+         "has_custom_timelines": False,
+         "advertiser_account_type": "none"}
+
+# This user is actually organic
+test2 = {"statuses_count": 628.0,
+        "followers_count": 10.0,
+        "friends_count": 24.0,
+        "favourites_count": 649.0,
+        "listed_count": 0.0,
+        "media_count": 33.0,
+        "life_span": 216,
+        "default_profile_image": False,
+        "geo_enabled": False,
+        "protected": False,
+        "verified": False,
+        "has_custom_timelines": False,
+        "advertiser_account_type": "none"}
+        
  {"type": "L",
   "air_temperature_[k]": 298.0,
   "process_temperature_[k]": 308.7,
