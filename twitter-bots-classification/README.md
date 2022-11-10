@@ -196,6 +196,7 @@ To build a bento execute a command:
 ```bash
 bentoml build
 ```
+![image](https://user-images.githubusercontent.com/91184329/201191196-3843ebaa-bda7-4229-a86a-aede4fb7bf7f.png)
   
 To deploy model using the Docker, containerize the model into a Docker image, using the bentomodel file, and type the following command to containerize:
 
