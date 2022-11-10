@@ -224,6 +224,9 @@ docker run -it --rm -p 3000:3000 twitter_bot_classifier:t7ux53tbekfdkaav serve -
 
 To access the deployment visit [local host](http://localhost:3000). You can make the predictions!
 
+![image](https://user-images.githubusercontent.com/91184329/201193400-6c6d184e-3cdd-4c2b-a437-51e3bea862b1.png)
+
+
 ## Deployment using [Yandex Serverless Containers](https://cloud.yandex.com/en/docs/serverless-containers/operations)
 
 1. Register, install and initialize the [Yandex Cloud command line interface](https://cloud.yandex.com/en/docs/cli/quickstart#install).
