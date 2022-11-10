@@ -19,7 +19,7 @@ class profile_data(BaseModel):
     has_custom_timelines: bool
     advertiser_account_type: object
 
-model_ref = bentoml.sklearn.get("twitter_bot_classify_model:xng2m3daog2ndodq")
+model_ref = bentoml.sklearn.get("twitter_bot_classify_model:7lt5hulbdgrrvodq")
 dv = model_ref.custom_objects["dictVectorizer"]
 
 model_runner = model_ref.to_runner()
