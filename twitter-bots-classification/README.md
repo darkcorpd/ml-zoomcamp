@@ -130,13 +130,13 @@ Local deployment can be run using the following command in the terminal:
 bentoml serve train.py:svc --production
 ```
 
-The Swagger interfase can be found by the address of [local host](http://localhost:3000)
+The Swagger interface can be found by the address of [local host](http://localhost:3000)
 
 ## Deployment locally using Jupyter Notebook 
 
 The file [predict.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/predict.ipynb) can be used to load the BentoML model and predict if a Twitter user is bot or not. 
 
-A dictionary scheme must be used:
+A pydantic dictionary scheme must be used:
 
 ```
 statuses_count: float
@@ -153,20 +153,11 @@ verified: bool
 has_custom_timelines: bool
 advertiser_account_type: object
 ```
-
-```python
-{"type": str,
- "air_temperature_[k]": float,
- "process_temperature_[k]": float,
- "rotational_speed_[rpm]": int,
- "torque_[nm]": float,
- "tool_wear_[min]": int}
- ```
  
  Here is an example
  
  ```python
- # This user is actually a bot
+# This user is actually a bot:
 test1 = {"statuses_count": 417.0,
          "followers_count": 0.0,
          "friends_count": 1.0,
@@ -181,7 +172,7 @@ test1 = {"statuses_count": 417.0,
          "has_custom_timelines": False,
          "advertiser_account_type": "none"}
 
-# This user is actually organic
+# This user is actually an organic:
 test2 = {"statuses_count": 628.0,
         "followers_count": 10.0,
         "friends_count": 24.0,
@@ -195,53 +186,45 @@ test2 = {"statuses_count": 628.0,
         "verified": False,
         "has_custom_timelines": False,
         "advertiser_account_type": "none"}
-        
- {"type": "L",
-  "air_temperature_[k]": 298.0,
-  "process_temperature_[k]": 308.7,
-  "rotational_speed_[rpm]": 1268,
-  "torque_[nm]": 69.4,
-  "tool_wear_[min]": 189}
   ```
 ## Deployment using Docker
 
-Once you create you bento model in the script [build_bento_model_maintenance.ipynb](https://github.com/FranciscoOrtizTena/ML_Zoomcamp/blob/main/8_week/build_bento_model_maintenance.ipynb), you need to create a [bentofile.yaml](https://github.com/FranciscoOrtizTena/ML_Zoomcamp/blob/main/8_week/bentofile.yaml), specifying the service, some labels, programming language and the different packages to use. 
+The [build_bento_model_twitter_bots.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/build_bento_model_twitter_bots.ipynb) Jupyter Notebook is used to create a BentoML model.
+A [bentofile.yaml](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/bentofile.yaml) specifies the service, labels, programming language and the list of used packages.
 
 
-Then you need to build your bento with.
+To build a bento execute a command:
 
 ```bash
 bentoml build
 ```
   
-To deploy your model using the Docker images, you need first to containerize the previous model into a Docker image, using the bentomodel file, type the following on your terminal to containerize it.
+To deploy model using the Docker, containerize the model into a Docker image, using the bentomodel file, and type the following command to containerize:
 
 
 ```bash
-bentoml containerize maintenance_predict_classifier:fjxpm3s4soefsjv5
+bentoml containerize twitter_bot_classify_model:xng2m3daog2ndodq
 ```
 
-Once it's containerize it you can build the image using the following command on your terminal, remember to check the tag number for containerize it
+Once it's containerized one can build the image:
 
 ```bash
-docker run -it --rm -p 3000:3000 maintenance_predict_classifier:fjxpm3s4soefsjv5 serve --production
+docker run -it --rm -p 3000:3000 twitter_bot_classify_model:xng2m3daog2ndodq serve --production
 ```
 
-Another way is to download the docker image from the repository in the [docker hub](https://hub.docker.com/r/franciscoortiztena/maintenance_predict_classifier) 
-
-First you need to download the docker image with the following command in the terminal
+The docker image can be downloaded from the repository [docker image](https://hub.docker.com/r/darkcorpd/twitter-bots-classification)
 
 ```bash
-docker pull franciscoortiztena/maintenance_predict_classifier
+docker pull darkcorpd/twitter-bots-classification
 ```
 
-And then run the following command
+To run the docker the following command is used:
 
 ```bash
-docker run -it --rm -p 3000:3000 franciscoortiztena/maintenance_predict_classifier serve --production
+docker run -it --rm -p 3000:3000 darkcorpd/twitter-bots-classification serve --production
 ```
 
-As the one in deploying, you can visit the [local host](http://0.0.0.0:3000/) to make the predictions
+To access the deployment visit [local host](http://localhost:3000). You can make the predictions!
 
 ## Deployment using [Yandex Serverless Containers](https://cloud.yandex.com/en/docs/serverless-containers/operations)
 
