@@ -134,6 +134,8 @@ bentoml serve train.py:svc --production
 
 The Swagger interface can be found by the address of [local host](http://localhost:3000)
 
+![image](https://user-images.githubusercontent.com/91184329/201192051-c09b6231-d700-4927-b652-ea10b85d5e46.png)
+
 ## Deployment locally using Jupyter Notebook 
 
 The file [predict.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/predict.ipynb) can be used to load the BentoML model and predict if a Twitter user is bot or not. 
