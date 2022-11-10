@@ -189,6 +189,10 @@ test2 = {"statuses_count": 628.0,
         "has_custom_timelines": False,
         "advertiser_account_type": "none"}
   ```
+  
+![image](https://user-images.githubusercontent.com/91184329/201191596-8ec2edee-d2cd-4980-9302-fbd7c0686b18.png)
+
+
 ## Deployment using Docker
 
 To build a bento execute a command:
