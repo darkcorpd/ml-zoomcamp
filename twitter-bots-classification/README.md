@@ -114,12 +114,14 @@ The final models were trained with the full data train and compared with the tes
 
 ## Deployment locally using [BentoML](https://docs.bentoml.org/en/latest/tutorial.html)
 
-The file [build_bento_model_twitter_bots.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/build_bento_model_twitter_bots.ipynb) can be used to train the best model and save into a BentoML model for deployment.
+The [build_bento_model_twitter_bots.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/build_bento_model_twitter_bots.ipynb) Jupyter Notebook is used to create a BentoML model.
+
+A [bentofile.yaml](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/bentofile.yaml) specifies the service, labels, programming language and the list of used packages.
 
 The following command is used to import the BentoML model:
 
 ```bash
-bentoml models import twitter_bot_classify_model:xng2m3daog2ndodq.bentomodel
+bentoml models import twitter_bot_classify_model:7lt5hulbdgrrvodq.bentomodel
 ```
 
 The file [train.py](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/train.py) is elaborated with the script to deploy it locally using the BentoML interface. 
@@ -189,10 +191,6 @@ test2 = {"statuses_count": 628.0,
   ```
 ## Deployment using Docker
 
-The [build_bento_model_twitter_bots.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/build_bento_model_twitter_bots.ipynb) Jupyter Notebook is used to create a BentoML model.
-A [bentofile.yaml](https://github.com/darkcorpd/ml-zoomcamp/blob/main/twitter-bots-classification/bentofile.yaml) specifies the service, labels, programming language and the list of used packages.
-
-
 To build a bento execute a command:
 
 ```bash
@@ -201,18 +199,11 @@ bentoml build
   
 To deploy model using the Docker, containerize the model into a Docker image, using the bentomodel file, and type the following command to containerize:
 
-
 ```bash
-bentoml containerize twitter_bot_classify_model:xng2m3daog2ndodq
+bentoml containerize twitter_bot_classifier:t7ux53tbekfdkaav
 ```
 
-Once it's containerized one can build the image:
-
-```bash
-docker run -it --rm -p 3000:3000 twitter_bot_classify_model:xng2m3daog2ndodq serve --production
-```
-
-The docker image can be downloaded from the repository [docker image](https://hub.docker.com/r/darkcorpd/twitter-bots-classification)
+The docker image can be also downloaded from the repository [docker image](https://hub.docker.com/r/darkcorpd/twitter-bots-classification)
 
 ```bash
 docker pull darkcorpd/twitter-bots-classification
@@ -221,7 +212,7 @@ docker pull darkcorpd/twitter-bots-classification
 To run the docker the following command is used:
 
 ```bash
-docker run -it --rm -p 3000:3000 darkcorpd/twitter-bots-classification serve --production
+docker run -it --rm -p 3000:3000 twitter_bot_classifier:t7ux53tbekfdkaav serve --production
 ```
 
 To access the deployment visit [local host](http://localhost:3000). You can make the predictions!
@@ -233,17 +224,17 @@ To access the deployment visit [local host](http://localhost:3000). You can make
 2. Create a container registry:
 
 ```
-yc container registry create --name <my-reg>
+yc container registry create --name mlzoomcamp
 ```
 Result:
 
 ```
-done
-id: crpd50616s9a2t7gr8mi
-folder_id: b1g88tflru0ek1omtsu0
-name: my-reg
+done (1s)
+id: crppqmhkphar1670tc3q
+folder_id: b1g7t5n5f0dsjru3esu8
+name: mlzoomcamp
 status: ACTIVE
-created_at: "2022-11-09T14:34:06.601Z"
+created_at: "2022-11-10T19:25:31.502Z"
 ```
 
 Make sure the registry was created:
@@ -254,7 +245,7 @@ yc container registry list
 Result:
 |ID|NAME|FOLDER ID|
 |-----|--|--|
-|crpd50616s9a2t7gr8mi|my-reg|b1g88tflru0ek1omtsu0|
+|crppqmhkphar1670tc3q|mmlzoomcamp|bb1g7t5n5f0dsjru3esu8|
 
 
 3. Create IAM token and authorize with IAM token:
@@ -268,21 +259,22 @@ docker login --username iam --password <IAM TOKEN> cr.yandex
 
 4. Push container to the registry:
 ```
-docker push <LONG_NAME>:<TAG>
+docker push docker push twitter_bot_classifier:t7ux53tbekfdkaav
 ```
 
 5. Create a serverless container:
 ```
-yc serverless container create --name <container_name>
+yc serverless container create --name mlzoomcamp
 ```
 
 Result:
 ```
-id: bba3fva6ka5g********
-folder_id: b1gqvft7kjk3********
-created_at: "2021-07-09T14:49:00.891Z"
-name: my-beta-container
-url: https://bba3fva6ka5g********.containers.yandexcloud.net/
+done (1s)
+id: bbamgbl5meliajhlnard
+folder_id: b1g7t5n5f0dsjru3esu8
+created_at: "2022-11-10T19:29:41.261Z"
+name: mlzoomcamp
+url: https://bbamgbl5meliajhlnard.containers.yandexcloud.net/
 status: ACTIVE
 ```
 
@@ -314,4 +306,4 @@ yc serverless container get <container_name>
 ```
 Result:
 
-URL: <https://bbah254r1kim16a93724.containers.yandexcloud.net/>
+URL: <https://bbamgbl5meliajhlnard.containers.yandexcloud.net/>
