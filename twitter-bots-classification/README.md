@@ -288,10 +288,10 @@ url: https://bbamgbl5meliajhlnard.containers.yandexcloud.net/
 status: ACTIVE
 ```
 
-6. Create a container revision with prepared image and [service account ID](https://cloud.yandex.com/en/docs/iam/operations/sa/get-id):
+6. Create a container revision with prepared image and service account:
 ```
 yc serverless container revision deploy \
-  --container-name <container_name> \
+  --container-name mlzoomcamp \
   --image <Docker_image_URL> \
   --cores 1 \
   --memory 1GB \
@@ -303,17 +303,24 @@ yc serverless container revision deploy \
 Check revision by container name
 
 ```
-yc serverless container revision list --container-name <container_name>
+yc serverless container revision list --container-name mlzoomcamp
 ```
 
 7. Make it public and get an invocation link
-
 ```
-yc serverless container allow-unauthenticated-invoke <container_name>
+yc serverless container allow-unauthenticated-invoke mlzoomcamp
 ```
 ```
-yc serverless container get <container_name>
+yc serverless container get mlzoomcamp
 ```
 Result:
 
-URL: <https://bbamgbl5meliajhlnard.containers.yandexcloud.net/>
+```
+id: bbamgbl5meliajhlnard
+folder_id: b1g7t5n5f0dsjru3esu8
+created_at: "2022-11-10T19:29:41.261Z"
+name: mlzoomcamp
+url: https://bbamgbl5meliajhlnard.containers.yandexcloud.net/
+status: ACTIVE
+```
+![image](https://user-images.githubusercontent.com/91184329/201207330-d688322a-2a2b-4d54-adf9-6e9467a027a9.png)
