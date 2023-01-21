@@ -19,3 +19,25 @@ The goal of the contest is to classify images of different kitchenware items int
 * spoons
 * forks
 * knives
+
+## Project Setup
+
+[Saturn Cloud](https://saturncloud.io) platform was used for data preparation and model training. 
+
+A starter notebook for the Kitchenware classification competition on Kaggle: [keras-starter.ipynb](https://github.com/DataTalksClub/kitchenware-competition-starter/blob/main/keras-starter.ipynb) is a good start to learn how to:
+
+* Download the data from Kaggle and unzip it
+* Read the data
+* Train an xception model
+* Make predictions
+* Submit the results
+
+You can run this notebook in SaturnCloud:
+
+<p align="center">
+    <a href="https://app.community.saturnenterprise.io/dash/resources?recipeUrl=https://raw.githubusercontent.com/DataTalksClub/kitchenware-competition-starter/main/kitchenware-jupyter-recipe.json" target="_blank" rel="noopener">
+        <img src="https://saturncloud.io/images/embed/run-in-saturn-cloud.svg" alt="Run in Saturn Cloud"/>
+    </a>
+</p>
+
+See more on [GitHUB](https://github.com/DataTalksClub/kitchenware-competition-starter).
