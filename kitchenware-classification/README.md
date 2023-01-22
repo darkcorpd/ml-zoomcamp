@@ -42,7 +42,7 @@ You can run this notebook in SaturnCloud:
 
 See more on [GitHUB](https://github.com/DataTalksClub/kitchenware-competition-starter).
 
-## Running locally with waitress
+## Running locally with gunicorn/waitress
 
 1. Clone this repository on your computer.
 
@@ -54,9 +54,13 @@ pipenv install
 ```sh
 pipenv shell
 ```
-4. Run service with waitress:
+4. Run service with gunicorn:
 ```sh
-waitress-serve --listen=0.0.0.0:9060 predict:app
+pipenv run gunicorn --bind 0.0.0.0:9696 predict:app
+```
+Or with waitress:
+```sh
+waitress-serve --listen=0.0.0.0:9696 predict:app
 ```
 5. Run test.py to see attrition prediction on given data.
 
