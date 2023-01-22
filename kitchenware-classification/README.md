@@ -63,6 +63,8 @@ Or with waitress:
 waitress-serve --listen=0.0.0.0:9696 predict:app
 ```
 5. Run test.py to see attrition prediction on given data.
+![image](https://user-images.githubusercontent.com/91184329/213935382-b84cb16f-785a-4b6b-9d8f-428df5281f8b.png)
+
 
 ## Running locally with Docker
 
