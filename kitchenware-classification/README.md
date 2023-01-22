@@ -41,3 +41,37 @@ You can run this notebook in SaturnCloud:
 </p>
 
 See more on [GitHUB](https://github.com/DataTalksClub/kitchenware-competition-starter).
+
+## Running locally with waitress
+
+1. Clone this repository on your computer.
+
+2. Install dependencies from `Pipfile` by running command:
+```sh
+pipenv install
+```
+3. Activate virtual environment:
+```sh
+pipenv shell
+```
+4. Run service with waitress:
+```sh
+waitress-serve --listen=0.0.0.0:9060 predict:app
+```
+5. Run test.py to see attrition prediction on given data.
+
+## Running locally with Docker
+
+1. Build an image from a Dockerfile by the command:
+```sh
+docker build -t kitchenware-classification .
+```
+2. Run service:
+```sh
+docker run --rm -it -p 9060:9060 -d  kitchenware-classification
+```
+3. Run test.py to see probabilities of which class the kitchenware belongs to.
+
+The result of prediction:
+
+4. Change the image in test.py and see the new prediction.
