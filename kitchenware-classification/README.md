@@ -142,8 +142,55 @@ docker run -it --rm \
 
 You can test the tf-serving container with Jupyter Notebook (gateway.ipynb):
 
+![image](https://user-images.githubusercontent.com/91184329/214132828-46472f09-20d1-4dfc-af4d-fb714eb923a8.png)
 
+To export a Jupyter Notebook to a Python script use the following command:
 
+```sh
+jupyter nbconvert --to script gateway.ipynb
+```
+
+## Running everything locally with docker-compose
+
+`image-model.dockerfile` is used to dockerize our model: 
+
+```sh
+docker build -t kitchen-model:v1 -f image-model.dockerfile .
+```
+We can now run this new image like this:
+
+```sh
+docker run -it --rm \
+    -p 8500:8500 \
+    kitchen-model:v1
+```
+
+`image-gateway.dockerfile` is used to dockerize our gateway:
+
+```sh
+docker build -t kitchen-gateway:v1 -f image-gateway.dockerfile .
+```
+
+And now run it:
+
+```sh
+docker run -it --rm \
+    -p 9696:9696 \
+    kitchen-gateway:v1
+```
+With both images running, we can now test them with a simple `test.py` script.
+
+We can now run the app like this:
+
+```sh
+docker-compose up
+```
+
+We can shut down the app with:
+
+```sh
+docker-compose down
+```
 
 ## Deploying TensorFlow models to Kubernetes
 
