@@ -87,6 +87,63 @@ The result of prediction:
 
 4. Change the image in test.py and see the new prediction.
 
+## TensorFlow-Serving
+
+TensorFlow Serving (`tf-serving`) requires models to be in a specific format.
+
+```python
+import tensorflow as tf
+from tensorflow import keras
+model = keras.models.load_model('model.h5')
+tf.saved_model.save(model, 'tlite_model')
+```
+
+This code loads a Keras model and simply saves it to Tensorflow format rather than Keras.
+
+Tensorflow-formatted models are directories containing a number of files:
+
+```
+converted_model
+┣╸ assets
+┣╸ fingerprint.pb
+┣╸ saved_model.pb
+┗╸ variables
+    ┣╸ variables.data-00000-of-00001
+    ┗╸ variables.index
+```
+
+The `saved_model_cli` utility allows us to inspect the contents of the tf model:
+* `saved_model_cli show --dir converted_model --all`
+
+The ***signature definition*** describes both the inputs and the outputs of the model:
+
+    signature_def['serving_default']:
+        The given SavedModel SignatureDef contains the following input(s):
+            inputs['input_4'] tensor_info:
+                dtype: DT_FLOAT
+                shape: (-1, 299, 299, 3)
+                name: serving_default_input_8:0
+        The given SavedModel SignatureDef contains the following output(s):
+            outputs['dense_3'] tensor_info:
+                dtype: DT_FLOAT
+                shape: (-1, 10)
+                name: StatefulPartitionedCall:0
+        Method name is: tensorflow/serving/predict
+
+We can run the tf-serving Docker image with model mounted in a volume with the following command:
+
+```sh
+docker run -it --rm \
+    -p 8500:8500 \
+    -v "$(pwd)/tlite_model:/models/tlite_model/1" \
+    -e MODEL_NAME="tlite_model" \
+    tensorflow/serving:2.7.0
+```
+
+You can test the tf-serving container with Jupyter Notebook (gateway.ipynb):
+
+
+
 
 ## Deploying TensorFlow models to Kubernetes
 
