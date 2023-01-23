@@ -47,22 +47,27 @@ See more on [GitHUB](https://github.com/DataTalksClub/kitchenware-competition-st
 1. Clone this repository on your computer.
 
 2. Install dependencies from `Pipfile` by running command:
+
 ```sh
 pipenv install
 ```
 3. Activate virtual environment:
+
 ```sh
 pipenv shell
 ```
 4. Run service with gunicorn:
+
 ```sh
 pipenv run gunicorn --bind 0.0.0.0:9696 predict:app
 ```
 Or with waitress:
+
 ```sh
 waitress-serve --listen=0.0.0.0:9696 predict:app
 ```
 5. Run test.py to see attrition prediction on given data.
+
 ![image](https://user-images.githubusercontent.com/91184329/213935382-b84cb16f-785a-4b6b-9d8f-428df5281f8b.png)
 
 
@@ -81,3 +86,44 @@ docker run --rm -it -p 9060:9060 -d  kitchenware-classification
 The result of prediction:
 
 4. Change the image in test.py and see the new prediction.
+
+
+## Deploying TensorFlow models to Kubernetes
+
+Load the image to Kind, apply the deployment to cluster, test it by forwarding the pod's port and using the local gateway script:
+
+```sh
+kind load docker-image kitchen-model:v1
+kubectl apply -f model-deployment.yaml
+kubectl get pod
+kubectl port-forward tf-serving-kitchen-model-#add_here_the_id# 8500:8500
+# call the gateway script after the command above from another terminal
+```
+
+Create TF-Serving model deployment service, test it with port-forwarding and the local gateway script:
+
+```sh
+kubectl apply -f model-service.yaml
+kubectl get pod
+kubectl port-forward service/tf-serving-kitchen-model 8500:8500
+# call the gateway script after the command above from another terminal
+```
+
+Deploying the Gateway, repeating the same steps we did for the model, but this time for the gateway.
+
+```sh
+kind load docker-image kitchen-gateway:v2
+kubectl apply -f gateway-deployment.yaml
+kubectl get pod
+kubectl port-forward gateway-#add_here_the_id# 9696:9696
+# Now run the test script to test the gateway
+```
+
+Create Gateway deployment service
+
+```sh
+kubectl apply -f gateway-service.yaml
+kubectl get service
+kubectl port-forward service/gateway 8080:80
+# Now run the test script to test the gateway service
+```
