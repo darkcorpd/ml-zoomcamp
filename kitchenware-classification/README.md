@@ -1,6 +1,13 @@
 # Kitchenware Classification
 This image classification project corresponds to [MLZoomcamp 2022](http://mlzoomcamp.com/) Capstone-II Project.
 
+## Problem Description
+
+The classification of kitchenware has a variety of applications ranging from assisting physically disabled individuals to helping in daily household chores. A hierarchical classifier recognizes 10 classes of cutlery with a total of 9370 images that vary from class to class. Given the amount of noise and shape variations present in the segmented images and features, it was challenging to achieve a high accuracy rate for the given set of classes. Finally, an average accuracy of 90% was achieved with some improvements.
+
+With the growth and advent of technology in the 21st century, every piece of human work is getting automated. This kind of automation has reduced human effort and enhanced their focus on more difficult and challenging jobs instead of the day to day menial jobs. The way technology and robotics has entered our homes is astonishing. This trend is growing exponentially and will continue to grow with young researchers and engineers pioneering their ideas in this field. From automatic lights, fans, heaters and other electronic devices, imagine a robot helping you in the kitchen to cook a delicious meal whilst you sit leisurely. This robot could also be helpful in washing the dishes, lending you a helping hand while you are cooking, cleaning the table after the meal is done and also preparing the whole meal.
+
+The idea behind this work is to improve the effectiveness of the classifier, deploy locally and prepare a service for cloud deployment.
 
 ## Dataset Description
 
@@ -66,7 +73,7 @@ Or with waitress:
 ```sh
 waitress-serve --listen=0.0.0.0:9696 predict:app
 ```
-5. Run test.py to see attrition prediction on given data.
+5. Run [test.py](https://github.com/darkcorpd/ml-zoomcamp/blob/main/kitchenware-classification/test.py) to see attrition prediction on given data.
 
 ![image](https://user-images.githubusercontent.com/91184329/213935382-b84cb16f-785a-4b6b-9d8f-428df5281f8b.png)
 
@@ -74,13 +81,17 @@ waitress-serve --listen=0.0.0.0:9696 predict:app
 ## Running locally with Docker
 
 1. Build an image from a Dockerfile by the command:
+ 
 ```sh
 docker build -t kitchenware-classification .
 ```
+
 2. Run service:
+
 ```sh
 docker run --rm -it -p 9060:9060 -d  kitchenware-classification
 ```
+
 3. Run test.py to see probabilities of which class the kitchenware belongs to.
 
 The result of prediction:
@@ -140,7 +151,7 @@ docker run -it --rm \
     tensorflow/serving:2.7.0
 ```
 
-You can test the tf-serving container with Jupyter Notebook (gateway.ipynb):
+You can test the tf-serving container with Jupyter Notebook ([gateway.ipynb](https://github.com/darkcorpd/ml-zoomcamp/blob/main/kitchenware-classification/gateway.ipynb)):
 
 ![image](https://user-images.githubusercontent.com/91184329/214132828-46472f09-20d1-4dfc-af4d-fb714eb923a8.png)
 
